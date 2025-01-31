@@ -1,0 +1,51 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.img-thumbnail {
+    width: 100px;
+    height: auto;
+    margin-right: 15px;
+}
+
+.img-preview {
+    width: 200px;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+}
+
+h2, h3 {
+    color: #333;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+
+.form-select {
+    background-color: #faf0e6;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    color: #333;
+}
+
+/* Add custom styles for the toast messages if needed */
+/* .Toastify__toast--success {
+    background-color: green;
+    color: white;
+}
+
+.Toastify__toast--error {
+    background-color: red;
+    color: white;
+} */

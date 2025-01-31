@@ -1,0 +1,106 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Background image styling */
+.bg-image {
+    width: 100%;
+    height: 100%;
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* Register container styling */
+.register-container {
+    width: 90%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #fff8dc;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.register-logo {
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 150px;
+    margin-bottom: -17px;
+}
+
+.header {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #b8860b;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align the form items */
+}
+
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+    width: 100%; /* Ensure the input group takes full width */
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Ensure the label takes full width */
+}
+
+.icon {
+    position: absolute;
+    left: 10px;
+    color: #b8860b;
+}
+
+.input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf0e6;
+     /* Include padding and border in the element's total width and height */
+}
+
+.button {
+    width: 100%;
+    padding: 10px;
+    background-color: #daa520;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-link {
+    margin-top: 20px;
+}
+
+.link {
+    color: #1e90ff;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+

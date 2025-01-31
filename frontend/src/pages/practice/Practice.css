@@ -1,0 +1,79 @@
+.practice-card {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.practice-card h5, .practice-card h6 {
+    color: #333;
+}
+
+.practice-card textarea {
+    resize: none;
+}
+
+.custom-audio-button {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.custom-audio-button img {
+    width: 120px;
+    height: 120px;
+}
+
+.btn-warning {
+    background-color: #ff8c42;
+    border-color: #ff8c42;
+    color: #fff;
+}
+
+.dropdown-toggle {
+    background-color: #ff8c42;
+    border-color: #ff8c42;
+    color: #fff;
+}
+
+.timer span {
+    font-size: 2em;
+    color: #333;
+}
+
+.progress-container {
+    margin-top: 15px;
+}
+
+.progress-bar-wrapper {
+    margin-bottom: 20px;
+}
+
+.progress-bar-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.answer-label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ff8c42;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+    height: 25px;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    font-size: 1rem;
+    line-height: 25px;
+    transition: width 1s ease-in-out;
+    color: #fff;
+    text-align: center;
+}

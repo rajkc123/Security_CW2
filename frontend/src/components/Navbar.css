@@ -1,0 +1,66 @@
+/* Navbar.css */
+
+.navbar-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 1rem 2rem;
+}
+
+.navbar-logo {
+    border-radius: 50%;
+}
+
+.nav-link {
+    color: #ffffff;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #00aaff;
+}
+
+.navbar-toggler-icon {
+    filter: invert(100%);
+}
+
+/* Highlighted buttons for Register and Login */
+.btn-highlight {
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #ff8c42;
+    color: #000000; /* Set text color to black */
+    background-color: #ff8c42;
+    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.5);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-highlight:hover {
+    background-color: #e67c32;
+    color: #000000; /* Ensure text color remains black on hover */
+}
+
+.user-dropdown {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+}
+
+.dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: none;
+}
+
+.dropdown-item {
+    color: #000000;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #ff8c42;
+    color: #ffffff;
+}
