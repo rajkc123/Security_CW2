@@ -11,7 +11,7 @@ const Navbar = () => {
     // Logout function to clear user data and redirect to login page
     const handleLogout = () => {
         localStorage.clear();
-        window.location.href = '/login';
+        window.location.href = '/';
     };
 
     useEffect(() => {

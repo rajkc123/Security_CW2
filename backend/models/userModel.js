@@ -56,6 +56,17 @@ const registerSchema = new mongoose.Schema({
     resetPasswordOTPExpiry: {
         type: Date,
     },
+    // NEW FIELDS FOR SUBSCRIPTION STATUS
+    subscriptionPlan: {
+        type: String,
+        enum: ['7-days', '15-days', null],
+        default: null,
+    },
+    subscriptionExpiry: {
+        type: Date,
+        default: null,
+    },
+    
 });
 
 // OPTIONAL: Check password expiry (existing method)

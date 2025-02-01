@@ -53,6 +53,8 @@ const Login = () => {
             if (response.data.success) {
                 localStorage.setItem('userData', response.data.userData.username);
                 localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userId', response.data.userData.id);
+
 
                 toast.success('Login successful');
                 setTimeout(() => {

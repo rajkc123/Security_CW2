@@ -2,13 +2,21 @@ const express = require('express');
 const Stripe = require('stripe');
 const router = express.Router();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-const bodyParser = require('body-parser');
+const rateLimit = require('express-rate-limit');
+const User = require('../models/userModel');
 
-// Middleware to parse Stripe's raw body for webhooks
+// Apply rate limiter only on webhooks
+const webhookLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.',
+});
+
+// Middleware to parse raw body for webhook signature verification
 router.post(
-    '/webhook',
-    bodyParser.raw({ type: 'application/json' }),
-    (req, res) => {
+    '/webhook', webhookLimiter,
+    express.raw({ type: 'application/json' }),
+    async (req, res) => {
         const sig = req.headers['stripe-signature'];
         let event;
 
@@ -23,24 +31,77 @@ router.post(
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
 
-        // Handle the event types
-        switch (event.type) {
-            case 'checkout.session.completed':
-                const session = event.data.object;
-                console.log(`Payment successful for session: ${session.id}`);
-                // TODO: Update subscription in the database
-                break;
-            default:
-                console.log(`Unhandled event type: ${event.type}`);
-        }
+        console.log('Webhook event received:', event.type);
 
-        res.json({ received: true });
+        if (event.type === 'checkout.session.completed') {
+            try {
+                await handleSessionCompleted(event);
+                res.status(200).send('Subscription updated.');
+            } catch (err) {
+                console.error('Error handling checkout session:', err);
+                res.status(500).send('Internal Server Error');
+            }
+        } else {
+            console.log(`Unhandled event type: ${event.type}`);
+            res.status(400).send('Event not handled');
+        }
     }
 );
 
+// Extracted function to handle successful payment session completion
+async function handleSessionCompleted(event) {
+    const session = event.data.object;
+    const { userId, plan } = session.metadata;
+
+    console.log(`Handling session for userId: ${userId}, plan: ${plan}`);
+
+    if (!userId || !plan) {
+        throw new Error('User ID or plan is missing in session metadata.');
+    }
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error(`User not found with ID: ${userId}`);
+        }
+
+        console.log('User found in database:', userId);
+
+        let newExpiryDate = new Date();
+        const duration = plan === '7-days' ? 7 : 15;
+
+        // Extend subscription if already active
+        if (user.subscriptionExpiry && new Date(user.subscriptionExpiry) > new Date()) {
+            console.log('User already has an active subscription. Extending expiry date.');
+            newExpiryDate = new Date(user.subscriptionExpiry);
+        }
+        newExpiryDate.setDate(newExpiryDate.getDate() + duration);
+
+        console.log('New subscription expiry date:', newExpiryDate);
+
+        // Update in MongoDB
+        await User.findByIdAndUpdate(userId, {
+            subscriptionPlan: plan,
+            subscriptionExpiry: newExpiryDate,
+        });
+
+        // Update user subscription in MongoDB
+        user.subscriptionPlan = plan;
+        user.subscriptionExpiry = newExpiryDate;
+        await user.save();
+
+        console.log(`Subscription successfully updated for user ${userId} with plan ${plan}`);
+    } catch (err) {
+        console.error('Error updating subscription in MongoDB:', err);
+        throw err;  // Rethrow error for proper handling in the webhook route
+    }
+}
+
 // Create Stripe payment session
 router.post('/create-payment-intent', async (req, res) => {
-    const { amount, plan } = req.body;
+    const { amount, plan, userId } = req.body;
+
+    console.log('Payment session initiation:', { userId, plan, amount });
 
     try {
         const session = await stripe.checkout.sessions.create({
@@ -58,11 +119,14 @@ router.post('/create-payment-intent', async (req, res) => {
             mode: 'payment',
             success_url: 'http://localhost:3000/pricing?paymentSuccess=true',
             cancel_url: 'http://localhost:3000/pricing?paymentSuccess=false',
+            metadata: { userId, plan },  // Ensure metadata is properly set
         });
+
+        console.log('Payment session created successfully:', session.id);
 
         res.json({ success: true, sessionId: session.id });
     } catch (error) {
-        console.error('Error creating payment intent:', error);
+        console.error('Error creating payment session:', error);
         res.status(500).json({ success: false, message: 'Unable to process payment' });
     }
 });

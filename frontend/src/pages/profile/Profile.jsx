@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react';
@@ -13,11 +12,9 @@ const Profile = () => {
     const [newPassword, setNewPassword] = useState('');
     const [message, setMessage] = useState('');
 
-
     const handleChangePassword = async () => {
         try {
             const token = localStorage.getItem('token');
-
             const response = await axios.post(
                 'http://localhost:5002/api/profile/change-password',
                 { oldPassword, newPassword },
@@ -32,11 +29,9 @@ const Profile = () => {
             setShowPasswordModal(false);
         } catch (error) {
             setMessage(error.response.data.message || 'Error changing password');
-
             toast.error(error.response.data.message);
         }
     };
-
 
     const fetchProfile = async () => {
         try {
@@ -52,8 +47,6 @@ const Profile = () => {
         }
     };
 
- 
-
     useEffect(() => {
         fetchProfile();
     }, []);
@@ -64,47 +57,61 @@ const Profile = () => {
 
     return (
         <>
-        <Navbar/>
-        <div className='backgorund'>
-        <img src="/profile_back.jpg" alt="bg-image" className="bg-image" />
+            <Navbar />
+            <div className='background'>
+                <img src="/profile_back.jpg" alt="bg-image" className="bg-image" />
 
-        <div className="profile-container">
-            <div className="profile-avatar">
-                <img src="profile.jpg" alt="Avatar" /> {/* Display default avatar */}
-            </div>
-            <div className="profile-details">
-                <h2>{userData.username}</h2>
-                <p>{userData.email}</p>
-                <h1>Your Subscription plan: Free</h1>
-                <p>expire on : 8/18/2024</p>
-            </div>
-            <button className="btn btn-warning" onClick={() => setShowPasswordModal(true)}>Change Password</button>
-
-            
-
-            {showPasswordModal && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <span className="close" onClick={() => setShowPasswordModal(false)}>&times;</span>
-                        <h2>Change Password</h2>
-                        <input
-                            type="text"
-                            placeholder="Old Password"
-                            value={oldPassword}
-                            onChange={(e) => setOldPassword(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            placeholder="New Password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                        <button type="submit" onClick={handleChangePassword}>Submit</button>
+                <div className="profile-container">
+                    <div className="profile-avatar">
+                        <img src="profile.jpg" alt="Avatar" />
                     </div>
+                    <div className="profile-details">
+                        <h2>{userData.username}</h2>
+                        <p>{userData.email}</p>
+                        <h3>
+                            Subscription Plan: {userData.subscriptionPlan || 'Free'}
+                        </h3>
+                        <p>
+                            Expiry Date:{' '}
+                            {userData.subscriptionExpiry
+                                ? new Date(userData.subscriptionExpiry).toLocaleDateString()
+                                : 'N/A'}
+                        </p>
+                    </div>
+                    <button
+                        className="btn btn-warning"
+                        onClick={() => setShowPasswordModal(true)}
+                    >
+                        Change Password
+                    </button>
+
+                    {showPasswordModal && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <span className="close" onClick={() => setShowPasswordModal(false)}>
+                                    &times;
+                                </span>
+                                <h2>Change Password</h2>
+                                <input
+                                    type="password"
+                                    placeholder="Old Password"
+                                    value={oldPassword}
+                                    onChange={(e) => setOldPassword(e.target.value)}
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="New Password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                                <button type="submit" onClick={handleChangePassword}>
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
-        </div>
+            </div>
         </>
     );
 };

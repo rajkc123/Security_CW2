@@ -1,14 +1,17 @@
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Pagination from '../../components/Pagination';
 import './Practice.css'; // Import the custom CSS
 
 
+
 //using regex for Progress report
 
 const Practice = () => {
+    const navigate = useNavigate();
     const [time, setTime] = useState(60);
     const [text, setText] = useState('');
     const [wordCount, setWordCount] = useState(0);
@@ -23,9 +26,42 @@ const Practice = () => {
     const [isDisabled, setIsDisabled] = useState(false); // State to track if input is disabled
     const [overallScore, setOverallScore] = useState(0); // State for overall progress score
     const [grammarPercentage, setGrammarPercentage] = useState(0); // State for grammar percentage
+    const [subscriptionValid, setSubscriptionValid] = useState(null); // Check subscription status
     const [spellingPercentage, setSpellingPercentage] = useState(0); // State for spelling percentage
 
     const bottomRef = useRef(null); // Reference to scroll to the bottom
+
+
+    useEffect(() => {
+        // Verify user subscription
+        const checkSubscription = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:5002/api/profile/check-subscription', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+    
+                if (response.data.active) {
+                    setSubscriptionValid(true);  // Correctly set the subscription status
+                } else {
+                    setSubscriptionValid(false);
+                    alert(response.data.message || 'You need a valid subscription to access this page.');
+                    navigate('/pricing'); // Redirect to pricing page if no subscription
+                }
+            } catch (error) {
+                console.error('Error checking subscription:', error);
+                setSubscriptionValid(false);
+                navigate('/pricing'); // Redirect in case of error
+            }
+        };
+    
+        checkSubscription();
+    }, [navigate]);
+    
+
+
 
     useEffect(() => {
         if (time > 0) {

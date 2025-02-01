@@ -29,6 +29,9 @@ app.use(apiLimiter);
 // CORS
 app.use(cors());
 
+// Stripe webhook needs raw body parsing
+app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
+
 // Parse JSON
 app.use(express.json());
 

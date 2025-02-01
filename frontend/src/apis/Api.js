@@ -75,8 +75,10 @@ export const verifyPasswordReset = async (data) => {
     return axios.post('http://localhost:5002/api/users/verifyPasswordReset', data);
 };
 
+
 // Create payment intent
 export const upgradeSubscription = async (data) => {
     return await axios.post('http://localhost:5002/api/payment/create-payment-intent', data);
 };
+
 
