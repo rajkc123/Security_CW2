@@ -10,6 +10,7 @@ const userRoutes = require('./routes/userRoutes');
 const practiceRoutes = require('./routes/practiceRoutes');
 const audioQuestionRoutes = require('./routes/audioQuestionRoutes');
 const profileRoute = require('./routes/profileRoute');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
 connectDB();
@@ -40,6 +41,7 @@ app.use('/api/users', userRoutes);
 app.use('/practiceTasks', practiceRoutes);
 app.use('/audioQuestions', audioQuestionRoutes);
 app.use('/api/profile', profileRoute);
+app.use('/api/payment', paymentRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the API');
